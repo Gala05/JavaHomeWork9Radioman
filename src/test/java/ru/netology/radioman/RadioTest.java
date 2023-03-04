@@ -2,208 +2,122 @@ package ru.netology.radioman;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class RadioTest {
-    // позитивные проверки на текущую станцию, ее переключение
-    @Test // проверяем текущую станцию
-    public void TestCurrentStation() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(5);
+    @Test
+    public void test() { //тест конструктора на желаемое количество радиостанций
+        Radio rad = new Radio(20);
 
-        int expected = 5;
+        Assertions.assertEquals(0, rad.getMinNumberStation());
+        Assertions.assertEquals(19, rad.getMaxNumberStation());
+        Assertions.assertEquals(0, rad.getNumberCurrentStation());
+    }
+
+    @ParameterizedTest // проверка на текущую станцию,
+    @CsvSource({
+            "0, 0",
+            "1, 1",
+            "8, 8",
+            "9, 9",
+            "9, 9",
+            "0, -1",
+            "0, 10"
+    })
+    public void TestCurrentStationAll(int expected, int i) {
+        Radio rad = new Radio();
+        rad.setNumberCurrentStation(i);
+
         int actual = rad.getNumberCurrentStation();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test // проверка минимального разрешенного значения номера радиостанции
-    public void TestMinCurrentStation() {
+    @ParameterizedTest // проверки на переключение радиостанции вперед
+    @CsvSource({
+            "1, 0",
+            "2, 1",
+            "8, 7",
+            "9, 8",
+            "0, 9"
+    })
+    public void shouldNextStationAll(int expected, int i) {
         Radio rad = new Radio();
-        rad.setNumberCurrentStation(0);
 
-        int expected = 0;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test // проверка максимального разрешенного значения номера радиостанции
-    public void TestMaxCurrentStation() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(9);
-
-        int expected = 9;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test //проверка на переключение радиостанции вперед в рамках диапазона
-    public void shouldNextStation() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(5);
+        rad.setNumberCurrentStation(i);
         rad.nextStation();
 
-        int expected = 6;
         int actual = rad.getNumberCurrentStation();
-
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test //проверка на переключение радиостанции назад в рамках диапазона
-    public void shouldPrevStation() {
+    @ParameterizedTest // проверки на переключение радиостанции назад
+    @CsvSource({
+            "9, 0",
+            "0, 1",
+            "7, 8",
+            "8, 9"
+    })
+    public void shouldPrevStationAll(int expected, int i) {
         Radio rad = new Radio();
-        rad.setNumberCurrentStation(9);
+
+        rad.setNumberCurrentStation(i);
         rad.prevStation();
 
-        int expected = 8;
         int actual = rad.getNumberCurrentStation();
-
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test //проверка на переключение радиостанции вперед, если текущая радиостанция 9
-    public void shouldMaxNextStation() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(9);
-        rad.nextStation();
-
-        int expected = 0;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test //проверка на переключение радиостанции назад, если текущая радиостанция 0
-    public void shouldMinPrevStation() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(0);
-        rad.prevStation();
-
-        int expected = 9;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test //проверка текущей громкости
-    public void TestVolume() {
+    @ParameterizedTest //проверки текущей громкости
+    @CsvSource({
+            "0, -1",
+            "0, 0",
+            "1, 1",
+            "99, 99",
+            "100, 100",
+            "0, 101"
+    })
+    public void TestVolumeAll(int expected, int i) {
         Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(5);
+        vol.setCurrentVolumeRadio(i);
 
-        int expected = 5;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-    //позитивные проверки на громкость, ее изменение
-    @Test //проверка минимального разрешенного значения громкости
-    public void TestMinVolume() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(0);
-
-        int expected = 0;
         int actual = vol.getCurrentVolumeRadio();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test //проверка максимального разрешенного значения громкости
-    public void TestMaxVolume() {
+    @ParameterizedTest // проверки на увеличение громкости
+    @CsvSource({
+            "1, 0",
+            "2, 1",
+            "99, 98",
+            "100, 99",
+            "100, 100"
+    })
+    public void TestIncreaseVolumeAll(int expected, int i) {
         Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(10);
-
-        int expected = 10;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test // проверка на увеличение громкости в пределах диапазона
-    public void TestIncreaseVolume() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(2);
+        vol.setCurrentVolumeRadio(i);
         vol.increaseVolume();
 
-        int expected = 3;
         int actual = vol.getCurrentVolumeRadio();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test // проверка на уменьшение громкости в пределах диапазона
-    public void TestDecreaseVolume() {
+    @ParameterizedTest // проверки на уменьшение громкости
+    @CsvSource({
+            "0, 0",
+            "0, 1",
+            "1, 2",
+            "98, 99",
+            "99, 100"
+    })
+    public void TestDecreaseVolumeAll(int expected, int i) {
         Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(2);
+        vol.setCurrentVolumeRadio(i);
         vol.decreaseVolume();
 
-        int expected = 1;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test // проверка на увеличение громкости при громкости на максимальном значении
-    public void TestIncreaseVolumeInMax() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(10);
-        vol.increaseVolume();
-
-        int expected = 10;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test // проверка на уменьшение громкости при громкости на минимальном значении
-    public void TestDecreaseVolumeInMin() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(0);
-        vol.decreaseVolume();
-
-        int expected = 0;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-    // негативные проверки на номера текущей радиостании, громкость
-    @Test //(негатив) проверка на установление кнопки радиостанции выше диапазона
-    public void shouldTestStationAboveMax() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(10);
-
-        int expected = 0;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test //(негатив) проверка на установление кнопки радиостанции ниже диапазона
-    public void shouldTestStationBeforeMin() {
-        Radio rad = new Radio();
-        rad.setNumberCurrentStation(-1);
-
-        int expected = 0;
-        int actual = rad.getNumberCurrentStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-    @Test //(негатив) проверка на установление громкости выше диапазона
-    public void TestAboveMaxVolume() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(11);
-
-        int expected = 0;
-        int actual = vol.getCurrentVolumeRadio();
-
-        Assertions.assertEquals(expected, actual);
-    }
-    @Test ////(негатив) проверка на установление громкости ниже диапазона
-    public void TestBelowMinVolume() {
-        Radio vol = new Radio();
-        vol.setCurrentVolumeRadio(-1);
-
-        int expected = 0;
         int actual = vol.getCurrentVolumeRadio();
 
         Assertions.assertEquals(expected, actual);

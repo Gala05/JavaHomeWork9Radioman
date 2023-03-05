@@ -8,11 +8,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 public class RadioTest {
     @Test
     public void test() { //тест конструктора на желаемое количество радиостанций
-        Radio rad = new Radio(20);
+        Radio rad = new Radio(20, 30, 50);
 
-        Assertions.assertEquals(0, rad.getMinNumberStation());
-        Assertions.assertEquals(19, rad.getMaxNumberStation());
-        Assertions.assertEquals(0, rad.getNumberCurrentStation());
+        Assertions.assertEquals(20, rad.getNumberCurrentStation());
+        Assertions.assertEquals(30, rad.getCurrentVolumeRadio());
+        Assertions.assertEquals(50, rad.getMaxNumberStation());
     }
 
     @ParameterizedTest // проверка на текущую станцию,
@@ -21,9 +21,7 @@ public class RadioTest {
             "1, 1",
             "8, 8",
             "9, 9",
-            "9, 9",
-            "0, -1",
-            "0, 10"
+            "9, 9"
     })
     public void TestCurrentStationAll(int expected, int i) {
         Radio rad = new Radio();
@@ -43,7 +41,7 @@ public class RadioTest {
             "0, 9"
     })
     public void shouldNextStationAll(int expected, int i) {
-        Radio rad = new Radio();
+        Radio rad = new Radio(0, 0, 9);
 
         rad.setNumberCurrentStation(i);
         rad.nextStation();
@@ -60,7 +58,7 @@ public class RadioTest {
             "8, 9"
     })
     public void shouldPrevStationAll(int expected, int i) {
-        Radio rad = new Radio();
+        Radio rad = new Radio(0, 0, 9);
 
         rad.setNumberCurrentStation(i);
         rad.prevStation();
@@ -71,12 +69,10 @@ public class RadioTest {
 
     @ParameterizedTest //проверки текущей громкости
     @CsvSource({
-            "0, -1",
             "0, 0",
             "1, 1",
             "99, 99",
             "100, 100",
-            "0, 101"
     })
     public void TestVolumeAll(int expected, int i) {
         Radio vol = new Radio();

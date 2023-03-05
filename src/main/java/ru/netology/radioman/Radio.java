@@ -1,80 +1,46 @@
 package ru.netology.radioman;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+
 public class Radio {
-    private int minNumberStation = 0;
-    private int maxNumberStation = 9;
-    private int numberCurrentStation = minNumberStation;
-    private int minVolumeRadio = 0;
-    private int maxVolumeRadio = 100;
-    private int currentVolumeRadio = minVolumeRadio;
-
-    public Radio(int count) { //желаемое количество радиостанций
-        maxNumberStation = minNumberStation + count - 1;
-    }
-
-    public Radio() {
-    }
-
-    public int getMinNumberStation() {
-        return minNumberStation;
-    }
-
-    public int getMaxNumberStation() {
-        return maxNumberStation;
-    }
-
-    public int getNumberCurrentStation() {
-        return numberCurrentStation;
-    }
-
-    public int getCurrentVolumeRadio() {
-        return currentVolumeRadio;
-    }
-
-    public void setNumberCurrentStation(int newCurrentStation) { //метод для проверки коррекности номера радиостанции
-        if (newCurrentStation < minNumberStation) {
-            return;
-        }
-        if (newCurrentStation > maxNumberStation) {
-            return;
-        }
-        numberCurrentStation = newCurrentStation;
-    }
-
-    public void setCurrentVolumeRadio(int newCurrentVolumeRadio) { //метод для проверки корректности громкости
-        if (newCurrentVolumeRadio < minVolumeRadio) {
-            return;
-        }
-        if (newCurrentVolumeRadio > maxVolumeRadio) {
-            return;
-        }
-        currentVolumeRadio = newCurrentVolumeRadio;
-    }
+    private int numberCurrentStation;
+    private int currentVolumeRadio;
+    private int maxNumberStation;
 
     public void nextStation() { // переключение радиостанции вперед
-        if (numberCurrentStation != maxNumberStation) {
-            numberCurrentStation++;
+        int target = numberCurrentStation + 1;
+        if (target > maxNumberStation) {
+            target = 0;
         } else {
-            numberCurrentStation = minNumberStation;
+            target = numberCurrentStation + 1;
         }
+        setNumberCurrentStation(target);
     }
 
     public void prevStation() { // переключение радиостанции назад
-        if (numberCurrentStation != minNumberStation) {
-            numberCurrentStation--;
+        int target = numberCurrentStation - 1;
+        if (target < 0) {
+            target = maxNumberStation;
         } else {
-            numberCurrentStation = maxNumberStation;
+            target = numberCurrentStation - 1;
         }
+        setNumberCurrentStation(target);
     }
 
     public void increaseVolume() { //увеличение громкости
-        if (currentVolumeRadio < maxVolumeRadio) {
+        if (currentVolumeRadio < 100) {
             currentVolumeRadio = currentVolumeRadio + 1;
         }
     }
 
     public void decreaseVolume() { //уменьшение громкости
-        if (currentVolumeRadio > minVolumeRadio) {
+        if (currentVolumeRadio > 0) {
             currentVolumeRadio = currentVolumeRadio - 1;
         }
     }

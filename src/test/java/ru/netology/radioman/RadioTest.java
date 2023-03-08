@@ -21,7 +21,8 @@ public class RadioTest {
             "1, 1",
             "8, 8",
             "9, 9",
-            "9, 9"
+            "0, -1",
+            "0, 10"
     })
     public void TestCurrentStationAll(int expected, int i) {
         Radio rad = new Radio();
@@ -73,6 +74,8 @@ public class RadioTest {
             "1, 1",
             "99, 99",
             "100, 100",
+            "0, -1",
+            "0, 101"
     })
     public void TestVolumeAll(int expected, int i) {
         Radio vol = new Radio();

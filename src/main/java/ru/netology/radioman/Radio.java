@@ -13,6 +13,26 @@ public class Radio {
     private int currentVolumeRadio;
     private int maxNumberStation;
 
+    public void setNumberCurrentStation(int newCurrentStation) { //метод для проверки коррекности номера радиостанции
+        if (newCurrentStation < 0) {
+            return;
+        }
+        if (newCurrentStation > maxNumberStation) {
+            return;
+        }
+        numberCurrentStation = newCurrentStation;
+    }
+
+    public void setCurrentVolumeRadio(int newCurrentVolumeRadio) { //метод для проверки корректности громкости
+        if (newCurrentVolumeRadio < 0) {
+            return;
+        }
+        if (newCurrentVolumeRadio > 100) {
+            return;
+        }
+        currentVolumeRadio = newCurrentVolumeRadio;
+    }
+
     public void nextStation() { // переключение радиостанции вперед
         int target = numberCurrentStation + 1;
         if (target > maxNumberStation) {

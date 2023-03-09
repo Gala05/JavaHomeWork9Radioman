@@ -25,7 +25,7 @@ public class RadioTest {
             "0, 10"
     })
     public void TestCurrentStationAll(int expected, int i) {
-        Radio rad = new Radio();
+        Radio rad = new Radio(0, 0, 9);
         rad.setNumberCurrentStation(i);
 
         int actual = rad.getNumberCurrentStation();
